@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Product, products } from '../products';
-import { CartService } from '../cart.service';
+import { Product } from '../products';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -10,10 +10,17 @@ import { CartService } from '../cart.service';
 export class ProductListComponent {
 
     constructor(
-    private cartService: CartService
+    private productService: ProductService
     ) { }
 
-    products = [...products];
+    products: Product[] = [];
+
+    ngOnInit(): void {
+        this.productService.getProducts().subscribe((products: Product[]) =>
+        {
+            this.products = products;
+        });
+    }
 
     share() {
       window.alert('The product has been shared!');
@@ -22,16 +29,4 @@ export class ProductListComponent {
     onNotify() {
       window.alert('You will be notified when the product goes on sale');
     }
-    
-    addToCart(product: Product) {
-        this.cartService.addToCart(product);
-        window.alert('Your product has been added to the cart!');
-      }
 }
-
-
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
-*/
